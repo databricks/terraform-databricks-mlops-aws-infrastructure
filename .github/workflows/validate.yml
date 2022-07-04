@@ -1,0 +1,30 @@
+name: Terraform Validation Check
+
+on:
+  workflow_dispatch:
+  pull_request_target:
+
+defaults:
+  run:
+    working-directory: ./cluster-start-time-prediction/terraform
+
+# Code reference can be found at https://github.com/hashicorp/setup-terraform
+jobs:
+  staging:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check -recursive
+        continue-on-error: trueg
+
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=staging init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=staging validate -no-color
