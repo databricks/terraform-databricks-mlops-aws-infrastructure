@@ -19,7 +19,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -backend=false
 
       - name: Terraform Validate
         id: validate
@@ -31,11 +31,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Staging Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
-            #### Terraform Staging Initialization ⚙️ \`${{ steps.init.outcome }}\`
-
-            #### Terraform Staging Validation 🤖 \`${{ steps.validate.outcome }}\`
-            <details><summary>Staging Validation Output</summary>
+            const output = `#### Terraform Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️ \`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖 \`${{ steps.validate.outcome }}\`
+            <details><summary>Validation Output</summary>
             \`\`\`\n
             ${{ steps.validate.outputs.stdout }}
             \`\`\`
