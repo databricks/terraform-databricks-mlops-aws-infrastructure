@@ -10,6 +10,7 @@ variable "group_name" {
 
 resource "databricks_service_principal" "sp" {
   display_name = var.display_name
+  allow_cluster_create = true
 }
 
 data "databricks_group" "sp_group" {
