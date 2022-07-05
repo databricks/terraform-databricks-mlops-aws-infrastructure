@@ -33,6 +33,7 @@ jobs:
           script: |
             const output = `#### Terraform Staging Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
             #### Terraform Staging Initialization ⚙️ \`${{ steps.init.outcome }}\`
+
             #### Terraform Staging Validation 🤖 \`${{ steps.validate.outcome }}\`
             <details><summary>Staging Validation Output</summary>
             \`\`\`\n
