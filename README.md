@@ -37,7 +37,7 @@ module "mlops_aws_infrastructure" {
 }
 ```
 
-### Usage example with MLOps AWS Project Module
+### Usage example with [MLOps AWS Project Module](https://registry.terraform.io/modules/databricks/mlops-aws-project/databricks/latest)
 ```hcl
 provider "databricks" {
   alias = "dev" # Authenticate using preferred method as described in Databricks provider
