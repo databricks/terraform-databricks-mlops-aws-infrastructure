@@ -37,6 +37,48 @@ module "mlops_aws_infrastructure" {
 }
 ```
 
+### Usage example with [MLOps AWS Project Module](https://registry.terraform.io/modules/databricks/mlops-aws-project/databricks/latest)
+```hcl
+provider "databricks" {
+  alias = "dev" # Authenticate using preferred method as described in Databricks provider
+}
+
+provider "databricks" {
+  alias = "staging"     # Authenticate using preferred method as described in Databricks provider
+}
+
+provider "databricks" {
+  alias = "prod"     # Authenticate using preferred method as described in Databricks provider
+}
+
+module "mlops_aws_infrastructure" {
+  source = "databricks/mlops-aws-infrastructure/databricks"
+  providers = {
+    databricks.dev     = databricks.dev
+    databricks.staging = databricks.staging
+    databricks.prod    = databricks.prod
+  }
+  staging_workspace_id          = "123456789"
+  prod_workspace_id             = "987654321"
+  additional_token_usage_groups = ["users"]     # This field is optional.
+}
+
+
+module "mlops_aws_project" {
+  source = "databricks/mlops-aws-project/databricks"
+  providers = {
+    databricks.staging = databricks.staging
+    databricks.prod    = databricks.prod
+  }
+  service_principal_name = "example-name"
+  project_directory_path = "/dir-name"
+  service_principal_group_name = module.mlops_aws_infrastructure.service_principal_group_name 
+  # The above field is optional, especially since in this case service_principal_group_name will be mlops-service-principals either way, 
+  # but this also serves to create an implicit dependency. Can also be replaced with the following line to create an explicit dependency:
+  # depends_on             = [module.mlops_aws_infrastructure]
+}
+```
+
 ## Requirements
 | Name | Version |
 |------|---------|
@@ -59,6 +101,7 @@ module "mlops_aws_infrastructure" {
 |dev_secret_scope_prefix_for_staging|The prefix used in the dev workspace secret scope for remote model registry access to the staging workspace.|string|no|
 |dev_secret_scope_prefix_for_prod|The prefix used in the dev workspace secret scope for remote model registry access to the prod workspace.|string|no|
 |staging_secret_scope_prefix_for_prod|The prefix used in the staging workspace secret scope for remote model registry access to the prod workspace.|string|no|
+|service_principal_group_name|The name of the service principal group created in the staging and prod workspace.|string|no|
 
 ## Providers
 | Name | Authentication | Use |
